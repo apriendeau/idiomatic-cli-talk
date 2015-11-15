@@ -1,0 +1,42 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700|Source+Sans+Pro:400,300,700);
+// colors
+$black: #000000;
+$grey: #333333;
+$white: #cfcfcf;
+$pink: #FF358B;
+$blue: #01B0F0;
+$green: #AEEE00;
+
+body {
+	background: $black;
+	color: $white;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+	color: $white;
+}
+
+pre code {
+	background: inherit;
+	font-family: 'Source Code Pro', sans-serif;
+	font-size: 16px;
+	span{
+		&.string {
+			color: $blue;
+		}
+		&.keyword {
+			color: $green;
+		}
+		&.typename {
+			color: $pink;
+		}
+	}
+}
+
+a {
+	color: $blue;
+	text-decoration: underline;
+	&:hover{
+		color: $pink;
+	}
+}
