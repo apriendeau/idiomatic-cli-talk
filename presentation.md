@@ -1,10 +1,5 @@
 title: Idiomatic not Idiotic CLIs
-author:
-  name: Austin Riendeau
-  twitter: apriendeau
-  url: http://www.apriendeau.com
-output: presentation.html
-theme: apriendeau/simple-theme
+output: index.html
 
 --
 
@@ -56,6 +51,8 @@ What we should do is:
 package main
 
 import (
+	"errors"
+	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -63,16 +60,16 @@ import (
 
 func main() {
 	var rootCmd = &cobra.Command{
-		Use:   "boom",
-		Short: "make an explosive entrance",
-		SilenceErrors: true,
-		SilenceUsage: true,
+		Use:           "boom",
+		Short:         "make an explosive entrance",
 		RunE: func(c *cobra.Command, args []string) error {
-			println("make an explosive entrance")
-			return nil
+			// oh no! lets fake a error
+			return errors.New("BOOM!! I SAY!")
 		},
 	}
-	if err := rootCmd.Execute(); err != nil {
+
+	if cmd, err := rootCmd.ExecuteC(); err != nil {
+		fmt.Println(cmd.Usage())
 		log.Fatal(err) // <- all errors come here
 	}
 }
@@ -80,25 +77,65 @@ func main() {
 
 --
 
+### Note on Cobra
+
+It will print the error and usage by default, to disable this use
+these boolean flags:
+
+* SilenceErrors
+* SilenceUsage
+
+
+--
+
 ### New Fad. New Problem... microservices.
 
 Where does all this logic live?
 
---
-
-## Each API comes with its own client lib of course.
+#### Each API comes with its own client lib of course.
 
 Contents:
 
 * Models
 * Version
 * Library Commands for the API calls
-  * Example: a `.Login()` command for our `/login` api
+  * i.e. a `.Login()` command for our `/login` api
 
 We have a total of 6 services, each now owning their own lib.
 
 --
 
-### Common Printer
+### Common Printer and Styles:
 
+1. Have your configuration or a package do the formatting.
 
+```go
+func scribe(w io.Writer, v interface{}, str string) error {
+	// example uses our config package
+	switch config.Format {
+	case "json"a:
+		if err := writeJSON(v); err != nil {
+			return err
+		}
+	case "shell":
+		fmt.Println(str)
+	default:
+		return errors.New("Not an acceptable format (json|shell)")
+	}
+}
+
+func writeJson(v interface{}) error {
+	...
+}
+```
+
+--
+
+<div class="author">
+<span class="name">Austin Riendeau</span><br/>
+<div class="social-container"><div class="twitter"><span class="flaticon-twitter"></span></div>
+<div class="name">@apriendeau</div>
+</div><br/>
+<div class="social-container"><div class="github"><span class="flaticon-cat6"></span></div>
+<div class="name">github.com/apriendeau</div></div><br/>
+</div>

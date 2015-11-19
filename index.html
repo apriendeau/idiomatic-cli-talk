@@ -392,7 +392,7 @@ pre .chunk {
   color: #aaa
 }
 
-@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700|Source+Sans+Pro:400,300,700);body{background:#000;color:#cfcfcf;font-family:'Source Sans Pro', sans-serif}h1,h2,h3,h4,h5,h6{color:#cfcfcf}pre code{background:inherit;font-family:'Source Code Pro', sans-serif;font-size:16px}pre code span.string{color:#01B0F0}pre code span.keyword{color:#AEEE00}pre code span.typename{color:#FF358B}a{color:#01B0F0;text-decoration:underline}a:hover{color:#FF358B}
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700|Source+Sans+Pro:400,300,700);body{background:#000;color:#cfcfcf;font-family:'Source Sans Pro', sans-serif;font-size:14px}h1,h2,h3,h4,h5,h6{color:#cfcfcf}section.slide-content{width:960px;height:800px}pre code{background:inherit;font-family:'Source Code Pro', sans-serif;font-size:16px}pre code span.string{color:#AEEE00}pre code span.keyword{color:#01B0F0;font-weight:normal}pre code span.typename{color:#FF358B}ul li code{background:#cfcfcf;color:#FF358B}a{color:#01B0F0;text-decoration:underline}a:hover{color:#FF358B}img{width:inherit}.author{width:100%;text-align:center;padding-top:50px}.author span.name{font-size:72px;display:inline-block;padding-left:30px}.author div.social-container{width:500px;margin:0 auto}.author div.social-container div.twitter{float:left;color:#01B0F0}.author div.social-container div.github{float:left;clear:left}.author div.social-container div.name{margin:30px 25px 0;float:left;color:#01B0F0;font-size:36px}@font-face{font-family:"Flaticon";src:url("flaticon.eot");src:url("flaticon.eot#iefix") format("embedded-opentype"),url("flaticon.woff") format("woff"),url("flaticon.ttf") format("truetype"),url("flaticon.svg") format("svg");font-weight:normal;font-style:normal}[class^="flaticon-"]:before,[class*=" flaticon-"]:before,[class^="flaticon-"]:after,[class*=" flaticon-"]:after{font-family:Flaticon;font-size:80px;font-style:normal;margin-left:20px}.flaticon-cat6:before{content:"\e000"}.flaticon-twitter:before{content:"\e001"}
 
   </style>
 </head>
@@ -445,6 +445,8 @@ pre .chunk {
 <pre><code class="lang-go"><span class="keyword">package</span> main
 
 <span class="keyword">import</span> (
+    <span class="string">"errors"</span>
+    <span class="string">"fmt"</span>
     <span class="string">"log"</span>
 
     <span class="string">"github.com/spf13/cobra"</span>
@@ -452,50 +454,80 @@ pre .chunk {
 
 <span class="keyword">func</span> main() {
     <span class="keyword">var</span> rootCmd = &amp;cobra.Command{
-        Use:   <span class="string">"boom"</span>,
-        Short: <span class="string">"make an explosive entrance"</span>,
-        SilenceErrors: <span class="constant">true</span>,
-        SilenceUsage: <span class="constant">true</span>,
+        Use:           <span class="string">"boom"</span>,
+        Short:         <span class="string">"make an explosive entrance"</span>,
         RunE: <span class="keyword">func</span>(c *cobra.Command, args []<span class="typename">string</span>) error {
-            <span class="built_in">println</span>(<span class="string">"make an explosive entrance"</span>)
-            <span class="keyword">return</span> <span class="constant">nil</span>
+            <span class="comment">// oh no! lets fake a error</span>
+            <span class="keyword">return</span> errors.New(<span class="string">"BOOM!! I SAY!"</span>)
         },
     }
-    <span class="keyword">if</span> err := rootCmd.Execute(); err != <span class="constant">nil</span> {
+
+    <span class="keyword">if</span> cmd, err := rootCmd.ExecuteC(); err != <span class="constant">nil</span> {
+        fmt.Println(cmd.Usage())
         log.Fatal(err) <span class="comment">// &lt;- all errors come here</span>
     }
 }</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-6">
-    <section class="slide-content"><h3 id="new-fad-new-problem-microservices-">New Fad. New Problem... microservices.</h3>
-<p>Where does all this logic live?</p>
+    <section class="slide-content"><h3 id="note-on-cobra">Note on Cobra</h3>
+<p>It will print the error and usage by default, to disable this use
+these boolean flags:</p>
+<ul>
+<li>SilenceErrors</li>
+<li>SilenceUsage</li>
+</ul>
 </section>
   </div>
   <div class="slide hidden" id="slide-7">
-    <section class="slide-content"><h2 id="each-api-comes-with-its-own-client-lib-of-course-">Each API comes with its own client lib of course.</h2>
+    <section class="slide-content"><h3 id="new-fad-new-problem-microservices-">New Fad. New Problem... microservices.</h3>
+<p>Where does all this logic live?</p>
+<h4 id="each-api-comes-with-its-own-client-lib-of-course-">Each API comes with its own client lib of course.</h4>
 <p>Contents:</p>
 <ul>
 <li>Models</li>
 <li>Version</li>
 <li>Library Commands for the API calls<ul>
-<li>Example: a <code>.Login()</code> command for our <code>/login</code> api</li>
+<li>i.e. a <code>.Login()</code> command for our <code>/login</code> api</li>
 </ul>
 </li>
 </ul>
+<p>We have a total of 6 services, each now owning their own lib.</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-8">
-    <section class="slide-content"><div class="author">
-  <h1 class="name">Austin Riendeau</h1>
-    <h3 class="twitter">
-      <a href="http://twitter.com/@apriendeau">@apriendeau</a>
-    </h3>
-    <h3 class="url">
-      <a href="http://www.apriendeau.com">http://www.apriendeau.com</a>
-    </h3>
-</div>
+    <section class="slide-content"><h3 id="common-printer-and-styles-">Common Printer and Styles:</h3>
+<ol>
+<li>Have your configuration or a package do the formatting.</li>
+</ol>
+<pre><code class="lang-go"><span class="keyword">func</span> scribe(w io.Writer, v <span class="keyword">interface</span>{}, str <span class="typename">string</span>) error {
+    <span class="comment">// example uses our config package</span>
+    <span class="keyword">switch</span> config.Format {
+    <span class="keyword">case</span> <span class="string">"json"</span>a:
+        <span class="keyword">if</span> err := writeJSON(v); err != <span class="constant">nil</span> {
+            <span class="keyword">return</span> err
+        }
+    <span class="keyword">case</span> <span class="string">"shell"</span>:
+        fmt.Println(str)
+    <span class="keyword">default</span>:
+        <span class="keyword">return</span> errors.New(<span class="string">"Not an acceptable format (json|shell)"</span>)
+    }
+}
+
+<span class="keyword">func</span> writeJson(v <span class="keyword">interface</span>{}) error {
+    ...
+}</code></pre>
 </section>
+  </div>
+  <div class="slide hidden" id="slide-9">
+    <section class="slide-content"><div class="author">
+<span class="name">Austin Riendeau</span><br/>
+<div class="social-container"><div class="twitter"><span class="flaticon-twitter"></span></div>
+<div class="name">@apriendeau</div>
+</div><br/>
+<div class="social-container"><div class="github"><span class="flaticon-cat6"></span></div>
+<div class="name">github.com/apriendeau</div></div><br/>
+</div></section>
   </div>
 
   <div class="controls">

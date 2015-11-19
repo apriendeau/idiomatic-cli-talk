@@ -11,9 +11,15 @@ body {
 	background: $black;
 	color: $white;
 	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 14px;
 }
 h1, h2, h3, h4, h5, h6 {
 	color: $white;
+}
+
+section.slide-content {
+	width: 960px;
+	height: 800px;
 }
 
 pre code {
@@ -22,17 +28,21 @@ pre code {
 	font-size: 16px;
 	span{
 		&.string {
-			color: $blue;
+			color: $green;
 		}
 		&.keyword {
-			color: $green;
+			color: $blue;
+			font-weight: normal;
 		}
 		&.typename {
 			color: $pink;
 		}
 	}
 }
-
+ul li code {
+	background: $white;
+	color: $pink;
+}
 a {
 	color: $blue;
 	text-decoration: underline;
@@ -40,3 +50,60 @@ a {
 		color: $pink;
 	}
 }
+img {
+	width: inherit;
+}
+.author {
+	width: 100%;
+	text-align: center;
+	padding-top: 50px;
+	span.name {
+		font-size: 72px;
+		display: inline-block;
+		padding-left: 30px;
+	}
+	div.social-container {
+		width: 500px;
+		margin: 0 auto;
+		div.twitter {
+			float: left;
+			color: $blue;
+		}
+		div.github {
+			float: left;
+			clear: left;
+		}
+		div.name {
+			margin: 30px 25px 0;
+			float: left;
+			color: $blue;
+			font-size: 36px;
+		}
+	}
+}
+
+@font-face {
+	font-family: "Flaticon";
+	src: url("flaticon.eot");
+	src: url("flaticon.eot#iefix") format("embedded-opentype"),
+	url("flaticon.woff") format("woff"),
+	url("flaticon.ttf") format("truetype"),
+	url("flaticon.svg") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {
+	font-family: Flaticon;
+    font-size: 80px;
+	font-style: normal;
+	margin-left: 20px;
+}
+.flaticon-cat6:before {
+	content: "\e000";
+}
+.flaticon-twitter:before {
+	content: "\e001";
+}
+
+
