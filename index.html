@@ -408,6 +408,7 @@ pre .chunk {
   <div class="slide hidden" id="slide-2">
     <section class="slide-content"><h3 id="mistakes-">Mistakes...</h3>
 <p>we all make em, embrace them, learn from them.</p>
+<p><img src="https://media.giphy.com/media/p60L4kNY1szqU/giphy.gif" alt="facepalm"></p>
 </section>
   </div>
   <div class="slide hidden" id="slide-3">
@@ -452,17 +453,19 @@ pre .chunk {
     <span class="string">"github.com/spf13/cobra"</span>
 )
 
-<span class="keyword">func</span> main() {
-    <span class="keyword">var</span> rootCmd = &amp;cobra.Command{
-        Use:           <span class="string">"boom"</span>,
-        Short:         <span class="string">"make an explosive entrance"</span>,
-        RunE: <span class="keyword">func</span>(c *cobra.Command, args []<span class="typename">string</span>) error {
-            <span class="comment">// oh no! lets fake a error</span>
-            <span class="keyword">return</span> errors.New(<span class="string">"BOOM!! I SAY!"</span>)
-        },
-    }
+<span class="keyword">var</span> RootCmd = &amp;cobra.Command{
+    Use:           <span class="string">"boom"</span>,
+    Short:         <span class="string">"make an explosive entrance"</span>,
+    SilenceErrors: <span class="constant">true</span>,
+    SilenceUsage:  <span class="constant">true</span>,
+    RunE: <span class="keyword">func</span>(c *cobra.Command, args []<span class="typename">string</span>) error {
+        <span class="comment">// oh no! lets fake a error</span>
+        <span class="keyword">return</span> errors.New(<span class="string">"BOOM!! I SAY!"</span>)
+    },
+}
 
-    <span class="keyword">if</span> cmd, err := rootCmd.ExecuteC(); err != <span class="constant">nil</span> {
+<span class="keyword">func</span> main() {
+    <span class="keyword">if</span> cmd, err := RootCmd.ExecuteC(); err != <span class="constant">nil</span> {
         fmt.Println(cmd.Usage())
         log.Fatal(err) <span class="comment">// &lt;- all errors come here</span>
     }
@@ -477,6 +480,13 @@ these boolean flags:</p>
 <li>SilenceErrors</li>
 <li>SilenceUsage</li>
 </ul>
+<p>This also helps with testing because you can call</p>
+<pre><code class="lang-go"><span class="keyword">func</span> TestBoom(t *testing.T) {
+    err := RootCmd.RunE()
+    <span class="keyword">if</span> err != <span class="constant">nil</span> {
+        t.Errorf(err) <span class="comment">// boom! easy enough to check</span>
+    }
+}</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-7">
@@ -508,7 +518,7 @@ these boolean flags:</p>
             <span class="keyword">return</span> err
         }
     <span class="keyword">case</span> <span class="string">"shell"</span>:
-        fmt.Println(str)
+        fmt.Fprintln(w, str)
     <span class="keyword">default</span>:
         <span class="keyword">return</span> errors.New(<span class="string">"Not an acceptable format (json|shell)"</span>)
     }
@@ -520,6 +530,18 @@ these boolean flags:</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-9">
+    <section class="slide-content"><h3 id="repos-i-recommend-and-suggest">Repos I recommend and suggest</h3>
+<ul>
+<li><p>github.com/spf13/cobra</p>
+</li>
+<li><p>github.com/kelseyhightower/envconfig</p>
+</li>
+<li><p>github.com/spf13/viper</p>
+</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-10">
     <section class="slide-content"><div class="author">
 <span class="name">Austin Riendeau</span><br/>
 <div class="social-container"><div class="twitter"><span class="flaticon-twitter"></span></div>

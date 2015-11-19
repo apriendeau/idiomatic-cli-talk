@@ -11,6 +11,8 @@ output: index.html
 
 we all make em, embrace them, learn from them.
 
+![facepalm](https://media.giphy.com/media/p60L4kNY1szqU/giphy.gif)
+
 --
 
 ### Major Errors
@@ -58,17 +60,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func main() {
-	var rootCmd = &cobra.Command{
-		Use:           "boom",
-		Short:         "make an explosive entrance",
-		RunE: func(c *cobra.Command, args []string) error {
-			// oh no! lets fake a error
-			return errors.New("BOOM!! I SAY!")
-		},
-	}
+var RootCmd = &cobra.Command{
+	Use:           "boom",
+	Short:         "make an explosive entrance",
+	SilenceErrors: true,
+	SilenceUsage:  true,
+	RunE: func(c *cobra.Command, args []string) error {
+		// oh no! lets fake a error
+		return errors.New("BOOM!! I SAY!")
+	},
+}
 
-	if cmd, err := rootCmd.ExecuteC(); err != nil {
+func main() {
+	if cmd, err := RootCmd.ExecuteC(); err != nil {
 		fmt.Println(cmd.Usage())
 		log.Fatal(err) // <- all errors come here
 	}
@@ -85,6 +89,17 @@ these boolean flags:
 * SilenceErrors
 * SilenceUsage
 
+
+This also helps with testing because you can call
+
+```go
+func TestBoom(t *testing.T) {
+	err := RootCmd.RunE()
+	if err != nil {
+		t.Errorf(err) // boom! easy enough to check
+	}
+}
+```
 
 --
 
@@ -118,7 +133,7 @@ func scribe(w io.Writer, v interface{}, str string) error {
 			return err
 		}
 	case "shell":
-		fmt.Println(str)
+		fmt.Fprintln(w, str)
 	default:
 		return errors.New("Not an acceptable format (json|shell)")
 	}
@@ -128,6 +143,16 @@ func writeJson(v interface{}) error {
 	...
 }
 ```
+
+--
+
+### Repos I recommend and suggest
+
+* github.com/spf13/cobra
+
+* github.com/kelseyhightower/envconfig
+
+* github.com/spf13/viper
 
 --
 
