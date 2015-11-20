@@ -7,9 +7,9 @@ output: index.html
 
 --
 
-### Look baby :)
+### Proof I had a kid.
 
-![hayden](img/thumb_IMG_0187_1024.jpg)
+<img src="img/thumb_IMG_0187_1024.jpg" class="hayden" />
 
 --
 

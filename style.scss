@@ -52,6 +52,10 @@ a {
 }
 img {
 	width: inherit;
+	&.hayden {
+		width: 500px;
+		margin: 0 auto;
+	}
 }
 .author {
 	width: 100%;
