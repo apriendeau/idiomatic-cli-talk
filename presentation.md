@@ -7,6 +7,12 @@ output: index.html
 
 --
 
+### Look baby :)
+
+![hayden](img/thumb_IMG_0187_1024.jpg)
+
+--
+
 ### Mistakes...
 
 we all make em, embrace them, learn from them.
